@@ -14,8 +14,9 @@
             <a href="/">EasyCRM</a>
             <div class="space-x-1">
                 <a href="{% url "main:about" %}" class="py-4 px-6">О нас</a>
-                <a href="/" class="py-4 px-6 bg-yellow-300">Войти</a>
-                <a href="/" class="py-4 px-6 bg-yellow-300">Регистрация</a>
+                <a href="{% url "userprofile:login" %}" class="py-4 px-6 bg-yellow-300">Войти</a>
+                <a href="{% url "userprofile:registration" %}"
+                   class="py-4 px-6 bg-yellow-300">Регистрация</a>
             </div>
         </nav>
         {% block content %}
