@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL = '/board/'
+LOGIN_REDIRECT_URL = 'dashboard:dashboard'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'main:index'
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'main',
     'userprofile',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
