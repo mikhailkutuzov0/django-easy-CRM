@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = '/board/'
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'main:index'
 
 # Application definition
 

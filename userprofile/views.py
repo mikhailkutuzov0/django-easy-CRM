@@ -15,7 +15,3 @@ def registration(request):
         form = UserCreationForm(request.POST)
 
     return render(request, 'userprofile/registration.html', {'form': form})
-
-
-def login(request):
-    ...

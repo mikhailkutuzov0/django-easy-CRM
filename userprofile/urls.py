@@ -13,5 +13,6 @@ urlpatterns = [
         Views.LoginView.as_view(template_name='userprofile/login.html'),
         name='login'
     ),
+    path('logout/',  Views.LogoutView.as_view(), name='logout'),
 
 ]

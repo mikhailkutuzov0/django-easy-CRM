@@ -1,1 +1,12 @@
-
+{% extends "main/base.html" %}
+{% block title %}
+    Войти
+{% endblock title %}
+{% block content %}
+    <h1 class="text-xl">Войти</h1>
+    <form method="post" action=".">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
+    </form>
+{% endblock content %}
