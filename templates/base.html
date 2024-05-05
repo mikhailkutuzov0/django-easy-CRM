@@ -11,7 +11,7 @@
     </head>
     <body>
         <nav class="py-4 px-6 flex justify-between bg-yellow-500">
-            <a href="/">EasyCRM</a>
+            <a href="{% url "main:index" %}">EasyCRM</a>
             <div class="space-x-1">
                 <a href="{% url "main:about" %}" class="py-4 px-6">О нас</a>
                 {% if request.user.is_authenticated %}
