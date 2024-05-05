@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'main'  # Пространство имен для URL-адресов
+app_name = 'prospective_client'  # Пространство имен для URL-адресов
 
 urlpatterns = [
     # Главная страница:
