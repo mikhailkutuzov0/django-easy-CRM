@@ -8,14 +8,14 @@ class ProspectiveClient(models.Model):
     клиенту и отметками о дате создания/изменения с указанием менеджера.
 
     Args:
-        name (str): Имя клиента.
-        email (str): Электронная почта клиента.
-        description (str, optional): Описание клиента.
-        status (str): Статус клиента.
-        priority (str): Приоритет клиента.
-        created_by (User): Менеджер, создавший запись.
-        created_at (datetime): Время создания записи.
-        modified_at (datetime): Время последнего изменения записи.
+        name (CharField): Имя клиента.
+        email (EmailField): Электронная почта клиента.
+        description (TextField): Описание клиента.
+        status (CharField): Статус клиента.
+        priority (CharField): Приоритет клиента.
+        created_by (ForeignKey): Менеджер, создавший запись.
+        created_at (DateTimeField): Время создания записи.
+        modified_at (DateTimeField): Время последнего изменения записи.
     """
     LOW = 'Низкий приоритет'
     MEDIUM = 'Средний приоритет'
@@ -55,3 +55,6 @@ class ProspectiveClient(models.Model):
         db_table = 'prospective_client'
         verbose_name = 'Потенциальный клиент'
         verbose_name_plural = 'Потенциальные клиенты'
+
+    def __str__(self):
+        return f'{self.name} | {self.status} | {self.priority}'
