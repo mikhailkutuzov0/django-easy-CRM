@@ -11,5 +11,6 @@ urlpatterns = [
         views.delete_prospective_client,
         name='client-delete'
     ),
+    path('<int:pk>/edit/', views.edit_prospective_client, name='client-edit'),
     path('add/', views.add_prospective_client, name='add-new'),
 ]

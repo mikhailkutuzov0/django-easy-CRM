@@ -7,19 +7,25 @@
         <h1 class="mb-4 text-xl">Все потенциальные клиенты</h1>
         <a href="{% url "prospectiveclient:add-new" %}"
            class="inline-block py-4 px-6 bg-yellow-300">Добавить нового потенциального клиента</a>
-        <div class="mt-6  flex justify-between">
-            <p class="py-4 px-2 bg-green-300 font-semibold w-full">Имя</p>
-            <p class="py-4 px-2 bg-green-300 font-semibold w-full">Приоритет</p>
-            <p class="py-4 px-2 bg-green-300 font-semibold w-full">Статус</p>
-        </div>
-        {% for client in all_clients %}
-            <div class="flex justify-between">
-                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">
-                    <a href="{% url "prospectiveclient:client-detail" client.id %}">{{ client.name }}</a>
-                </p>
-                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_priority_display }}</p>
-                <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_status_display }}</p>
+        {% if all_clients %}
+            <div class="mt-6  flex justify-between">
+                <p class="py-4 px-2 bg-green-300 font-semibold w-full">Имя</p>
+                <p class="py-4 px-2 bg-green-300 font-semibold w-full">Приоритет</p>
+                <p class="py-4 px-2 bg-green-300 font-semibold w-full">Статус</p>
             </div>
-        {% endfor %}
+            {% for client in all_clients %}
+                <div class="flex justify-between">
+                    <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">
+                        <a href="{% url "prospectiveclient:client-detail" client.id %}">{{ client.name }}</a>
+                    </p>
+                    <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_priority_display }}</p>
+                    <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_status_display }}</p>
+                </div>
+            {% empty %}
+                <p class="px-2">Тут пока пусто.</p>
+            {% endfor %}
+        {% else %}
+            <p class="mt-6 px-2">Тут пока пусто.</p>
+        {% endif %}
     </div>
 {% endblock content %}

@@ -41,8 +41,30 @@ def add_prospective_client(request):
             client = form.save(commit=False)
             client.created_by = request.user
             client.save()
-
+            messages.success(request, 'Потенциальный клиент был создан!')
             return redirect('/dashboard/prospective-clients/')
     else:
         form = AddProspectiveClient()
     return render(request, 'prospectiveclient/add.html', {'form': form})
+
+
+@login_required
+def edit_prospective_client(request, pk):
+    client = get_object_or_404(
+        ProspectiveClient, created_by=request.user, pk=pk)
+    if request.method == 'POST':
+        form = AddProspectiveClient(request.POST, instance=client)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(
+                request, 'Клиент был отредактирован!')
+
+            return redirect('/dashboard/prospective-clients/')
+    else:
+        form = AddProspectiveClient(instance=client)
+
+    return render(request, 'prospectiveclient/edit_client.html', {
+        'form': form
+    })
