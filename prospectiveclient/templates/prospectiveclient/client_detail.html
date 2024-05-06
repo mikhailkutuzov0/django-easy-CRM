@@ -19,6 +19,9 @@
             <p class="font-semibold">Измененен статус</p>
             <p class="mb-3">{{ client.modified_at }}</p>
         {% endif %}
+        <hr class="my-4">
+        <a href="{% url "prospectiveclient:client-delete" client.id %}">Удалить клиента</a>
+        <hr class="my-4">
         <a href="{% url "prospectiveclient:all" %}"
            class="inline-block py-4 px-6 bg-yellow-300">Назад к списку потенциальных клиентов</a>
     </div>

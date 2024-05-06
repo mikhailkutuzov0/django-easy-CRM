@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import AddProspectiveClient
@@ -23,6 +24,15 @@ def prospective_client_detail(request, pk):
 
 
 @login_required
+def delete_prospective_client(request, pk):
+    client = get_object_or_404(
+        ProspectiveClient, created_by=request.user, pk=pk)
+    client.delete()
+    messages.success(request, 'Потенциальный клиент был удален!')
+    return redirect('/dashboard/prospective-clients/')
+
+
+@login_required
 def add_prospective_client(request):
     if request.method == 'POST':
         form = AddProspectiveClient(request.POST)
@@ -32,7 +42,7 @@ def add_prospective_client(request):
             client.created_by = request.user
             client.save()
 
-            return redirect('/dashboard/')
+            return redirect('/dashboard/prospective-clients/')
     else:
         form = AddProspectiveClient()
     return render(request, 'prospectiveclient/add.html', {'form': form})
