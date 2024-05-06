@@ -3,11 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import AddProspectiveClient
 from .models import ProspectiveClient
+from client.models import Client
 
 
 @login_required
 def all_prospective_client(request):
-    all_clients = ProspectiveClient.objects.filter(created_by=request.user)
+    all_clients = ProspectiveClient.objects.filter(
+        created_by=request.user, converted_to_client=False)
     return render(request,
                   'prospectiveclient/all.html', {'all_clients': all_clients}
                   )
@@ -68,3 +70,19 @@ def edit_prospective_client(request, pk):
     return render(request, 'prospectiveclient/edit_client.html', {
         'form': form
     })
+
+
+@login_required
+def convert_to_client(request, pk):
+    client_to_convert = get_object_or_404(
+        ProspectiveClient, created_by=request.user, pk=pk)
+    Client.objects.create(
+        name=client_to_convert.name,
+        email=client_to_convert.email,
+        description=client_to_convert.description,
+        created_by=request.user
+    )
+    client_to_convert.converted_to_client = True
+    client_to_convert.save()
+    messages.success(request, f'{client_to_convert.name} теперь клиент!')
+    return redirect('/dashboard/prospective-clients/')
