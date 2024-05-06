@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ client.name }}
+{% endblock title %}
+{% block content %}
+    <div class="py-6 px-6">
+        <h1 class="mb-4 text-xl">{{ client.name }}</h1>
+        {% if client.description %}
+            <p class="font.semibold">Описание</p>
+            <p class="mb-3">{{ client.description }}</p>
+        {% endif %}
+        <p class="font-semibold">Дата создания</p>
+        <p class="mb-3">{{ client.created_at }}</p>
+        {% if client.created_at != client.modified_at %}
+            <p class="font-semibold">Измененен статус</p>
+            <p class="mb-3">{{ client.modified_at }}</p>
+        {% endif %}
+        <hr class="my-4">
+        <a href="#" class="py-2 px-4 bg-green-300">Изменить</a>
+        <a href="#" class="py-2 px-4 bg-red-500">Удалить клиента</a>
+        <hr class="my-4">
+        <a href="{% url "client:all" %}"
+           class="inline-block py-4 px-6 bg-yellow-300">Назад к списку клиентов</a>
+    </div>
+{% endblock content %}

@@ -21,8 +21,6 @@
                     <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_priority_display }}</p>
                     <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_status_display }}</p>
                 </div>
-            {% empty %}
-                <p class="px-2">Тут пока пусто.</p>
             {% endfor %}
         {% else %}
             <p class="mt-6 px-2">Тут пока пусто.</p>
