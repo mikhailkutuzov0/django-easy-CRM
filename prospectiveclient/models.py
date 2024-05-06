@@ -29,13 +29,13 @@ class ProspectiveClient(models.Model):
 
     NEW = 'Новый клиент'
     CONTACTED = 'Уже связались'
-    WON = 'Назначен'
+    WON = 'В работе'
     LOST = 'Упущен'
 
     CHOICES_STATUS = (
         (NEW, 'Новый клиент'),
         (CONTACTED, 'Уже связались'),
-        (WON, 'Назначен'),
+        (WON, 'В работе'),
         (LOST, 'Упущен'),
     )
 

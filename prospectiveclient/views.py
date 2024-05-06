@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .forms import AddProspectiveClient
 from .models import ProspectiveClient
 
@@ -10,6 +10,16 @@ def all_prospective_client(request):
     return render(request,
                   'prospectiveclient/all.html', {'all_clients': all_clients}
                   )
+
+
+@login_required
+def prospective_client_detail(request, pk):
+    client = get_object_or_404(
+        ProspectiveClient, created_by=request.user, pk=pk)
+
+    return render(
+        request, 'prospectiveclient/client_detail.html', {'client': client}
+    )
 
 
 @login_required
