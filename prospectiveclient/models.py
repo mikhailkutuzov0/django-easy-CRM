@@ -39,17 +39,34 @@ class ProspectiveClient(models.Model):
         (LOST, 'Упущен'),
     )
 
-    name = models.CharField(max_length=255)
-    email = models.EmailField()
-    description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=255, verbose_name='Имя')
+    email = models.EmailField(verbose_name='Почта')
+    description = models.TextField(
+        blank=True, null=True, verbose_name='Описание')
     status = models.CharField(
-        max_length=45, choices=CHOICES_STATUS, default=NEW)
+        max_length=45,
+        choices=CHOICES_STATUS,
+        default=NEW,
+        verbose_name='Статус'
+    )
     priority = models.CharField(
-        max_length=45, choices=CHOICES_PRIORITY, default=MEDIUM)
+        max_length=45,
+        choices=CHOICES_PRIORITY,
+        default=MEDIUM,
+        verbose_name='Приоритет'
+    )
+    converted_to_client = models.BooleanField(
+        default=False, verbose_name='Стал клиентом')
     created_by = models.ForeignKey(
-        User, related_name='prospectiveclients', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+        User,
+        related_name='clients',
+        on_delete=models.CASCADE,
+        verbose_name='Создано кем'
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Создано в')
+    modified_at = models.DateTimeField(
+        auto_now=True, verbose_name='Изменено в')
 
     class Meta():
         db_table = 'prospective_client'
