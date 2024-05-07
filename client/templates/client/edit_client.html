@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}
+    Редактировать клиента
+{% endblock title %}
+{% block content %}
+    <div class="py-6 px-6">
+        <h1>Редактировать клиента</h1>
+        <form method="post" action=".">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
+        </form>
+    </div>
+{% endblock content %}
