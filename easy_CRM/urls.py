@@ -25,4 +25,5 @@ urlpatterns = [
     path('dashboard/prospective-clients/',
          include('prospectiveclient.urls', namespace='prospectiveclient')),
     path('dashboard/clients/', include('client.urls', namespace='client')),
+    path('dashboard/teams/', include('team.urls', namespace='team')),
 ]

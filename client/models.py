@@ -1,8 +1,15 @@
 from django.contrib.auth.models import User
 from django.db import models
+from team.models import Team
 
 
 class Client(models.Model):
+    team = models.ForeignKey(
+        Team,
+        related_name='clients',
+        on_delete=models.CASCADE,
+        verbose_name='Состоит в команде'
+    )
     name = models.CharField(max_length=255, verbose_name='Имя')
     email = models.EmailField(verbose_name='Почта')
     description = models.TextField(

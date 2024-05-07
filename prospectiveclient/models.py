@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from team.models import Team
+
 
 class ProspectiveClient(models.Model):
     """
@@ -8,6 +10,7 @@ class ProspectiveClient(models.Model):
     клиенту и отметками о дате создания/изменения с указанием менеджера.
 
     Args:
+        team (ForeignKey): Состоит в команде
         name (CharField): Имя клиента.
         email (EmailField): Электронная почта клиента.
         description (TextField): Описание клиента.
@@ -39,6 +42,12 @@ class ProspectiveClient(models.Model):
         (LOST, 'Упущен'),
     )
 
+    team = models.ForeignKey(
+        Team,
+        related_name='prospectiveclients',
+        on_delete=models.CASCADE,
+        verbose_name='Состоит в команде'
+    )
     name = models.CharField(max_length=255, verbose_name='Имя')
     email = models.EmailField(verbose_name='Почта')
     description = models.TextField(
