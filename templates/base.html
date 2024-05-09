@@ -21,7 +21,8 @@
                        class="inline-block py-4 px-6 bg-yellow-300">Все клиенты</a>
                     <a href="{% url "dashboard:dashboard" %}"
                        class="py-4 px-6 bg-yellow-300">Панель</a>
-                    <a href="{% url "userprofile:logout" %}" class="py-4 px-6 bg-red-500">Выйти</a>
+                    <a href="{% url "userprofile:my-account" %}"
+                       class="py-4 px-6 bg-green-500">Мой аккаунт</a>
                 {% else %}
                     <a href="{% url "userprofile:login" %}" class="py-4 px-6 bg-yellow-300">Войти</a>
                     <a href="{% url "userprofile:registration" %}"
