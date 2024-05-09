@@ -3,8 +3,29 @@
     dashboard
 {% endblock title %}
 {% block content %}
-    <a href="{% url "prospectiveclient:all" %}"
-       class="inline-block py-4 px-6 bg-yellow-300">Все потенциальные клиенты</a>
-    <a href="{% url "client:all" %}"
-       class="inline-block py-4 px-6 bg-yellow-300">Все клиенты</a>
+    <div class="py-6 px-6">
+        <h1 class="mb-6 text-xl">Панель</h1>
+        <div class="flex space-x-4">
+            <div class="w-1/2 px-4 py-6 bg-gray-100 prospective_clients">
+                <h2 class="mb-4 text-lg">Новые потенциальные клиенты</h2>
+                {% for prospective_client in prospective_clients %}
+                    <div class="mb-2">
+                        <h3 class="font-semibold">{{ prospective_client.name }}</h3>
+                        <p class="text=xs">Статус: {{ prospective_client.get_status_display }}</p>
+                        <p class="text=xs">Приоритет: {{ prospective_client.get_priority_display }}</p>
+                        <a href="{% url "prospectiveclient:client-detail" prospective_client.id %}">Подробнее</a>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="w-1/2 px-4 py-6 bg-gray-100 clients">
+                <h2 class="mb-4 text-lg">Новые клиенты</h2>
+                {% for client in clients %}
+                    <div class="mb-2">
+                        <h3 class="font-semibold">{{ client.name }}</h3>
+                        <a href="{% url "client:client-detail" client.id %}">Подробнее</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock content %}

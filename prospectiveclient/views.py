@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+
+from team.models import Team
 from .forms import AddProspectiveClient
 from .models import ProspectiveClient
 from client.models import Client
@@ -40,8 +42,10 @@ def add_prospective_client(request):
         form = AddProspectiveClient(request.POST)
 
         if form.is_valid():
+            team = Team.objects.filter(created_by=request.user)[0]
             client = form.save(commit=False)
             client.created_by = request.user
+            client.team = team
             client.save()
             messages.success(request, 'Потенциальный клиент был создан!')
             return redirect('/dashboard/prospective-clients/')
@@ -76,9 +80,11 @@ def edit_prospective_client(request, pk):
 def convert_to_client(request, pk):
     client_to_convert = get_object_or_404(
         ProspectiveClient, created_by=request.user, pk=pk)
+    team = Team.objects.filter(created_by=request.user)[0]
     Client.objects.create(
         name=client_to_convert.name,
         email=client_to_convert.email,
+        team=team,
         description=client_to_convert.description,
         created_by=request.user
     )

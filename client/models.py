@@ -27,6 +27,7 @@ class Client(models.Model):
 
     class Meta():
         db_table = 'client'
+        ordering = ('name',)
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
 

@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+
+from team.models import Team
 from .models import Client
 from .forms import AddClient
 
@@ -24,8 +26,10 @@ def add_client(request):
         form = AddClient(request.POST)
 
         if form.is_valid():
+            team = Team.objects.filter(created_by=request.user)[0]
             client = form.save(commit=False)
             client.created_by = request.user
+            client.team = team
             client.save()
             messages.success(request, 'Клиент был создан!')
             return redirect('/dashboard/clients/')

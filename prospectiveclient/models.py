@@ -79,6 +79,7 @@ class ProspectiveClient(models.Model):
 
     class Meta():
         db_table = 'prospective_client'
+        ordering = ('name',)
         verbose_name = 'Потенциальный клиент'
         verbose_name_plural = 'Потенциальные клиенты'
 
