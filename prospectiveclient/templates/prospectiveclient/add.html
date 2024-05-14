@@ -5,10 +5,15 @@
 {% block content %}
     <div class="py-6 px-6">
         <h1>Добавить возможного клиента</h1>
-        <form method="post" action=".">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
+        {% if team.client_team_access.max_prospective_clients > team.prospectiveclients.all|length %}
+            Количество активных клиентов : {{ team.prospectiveclients.all | length }}
+            <form method="post" action=".">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
+            {% else %}
+                <div class="mt-6 px-6 py-4 bg-red-400 rounded-xl text-white">Лимит был исчерпан!</div>
+            {% endif %}
         </form>
     </div>
 {% endblock content %}

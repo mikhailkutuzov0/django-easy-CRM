@@ -22,6 +22,7 @@ def client_detail(request, pk):
 
 @login_required
 def add_client(request):
+    team = Team.objects.filter(created_by=request.user)[0]
     if request.method == 'POST':
         form = AddClient(request.POST)
 
@@ -35,7 +36,10 @@ def add_client(request):
             return redirect('/dashboard/clients/')
     else:
         form = AddClient()
-    return render(request, 'client/add.html', {'form': form})
+    return render(request, 'client/add.html', {
+        'form': form,
+        'team': team,
+    })
 
 
 @login_required

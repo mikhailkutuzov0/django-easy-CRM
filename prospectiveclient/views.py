@@ -38,6 +38,7 @@ def delete_prospective_client(request, pk):
 
 @login_required
 def add_prospective_client(request):
+    team = Team.objects.filter(created_by=request.user)[0]
     if request.method == 'POST':
         form = AddProspectiveClient(request.POST)
 
@@ -51,7 +52,10 @@ def add_prospective_client(request):
             return redirect('/dashboard/prospective-clients/')
     else:
         form = AddProspectiveClient()
-    return render(request, 'prospectiveclient/add.html', {'form': form})
+    return render(request, 'prospectiveclient/add.html', {
+        'form': form,
+        'team': team,
+    })
 
 
 @login_required
