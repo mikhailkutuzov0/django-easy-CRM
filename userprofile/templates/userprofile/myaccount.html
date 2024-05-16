@@ -12,7 +12,7 @@
             <strong>Команда:</strong> {{ team.name }}
             {% if team.created_by == request.user %}
                 <div>
-                    <a href="{% url "team:edit-team" team.id %}">Изменить</a>
+                    <a href="{% url "team:edit" team.id %}">Изменить</a>
                 </div>
             {% endif %}
         </p>

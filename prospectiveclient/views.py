@@ -33,7 +33,7 @@ def delete_prospective_client(request, pk):
         ProspectiveClient, created_by=request.user, pk=pk)
     client.delete()
     messages.success(request, 'Потенциальный клиент был удален!')
-    return redirect('/dashboard/prospective-clients/')
+    return redirect('prospectiveclient:all')
 
 
 @login_required
@@ -49,7 +49,7 @@ def add_prospective_client(request):
             client.team = team
             client.save()
             messages.success(request, 'Потенциальный клиент был создан!')
-            return redirect('/dashboard/prospective-clients/')
+            return redirect('prospectiveclient:all')
     else:
         form = AddProspectiveClient()
     return render(request, 'prospectiveclient/add.html', {
@@ -71,7 +71,7 @@ def edit_prospective_client(request, pk):
             messages.success(
                 request, 'Клиент был отредактирован!')
 
-            return redirect('/dashboard/prospective-clients/')
+            return redirect('prospectiveclient:all')
     else:
         form = AddProspectiveClient(instance=client)
 
@@ -95,4 +95,4 @@ def convert_to_client(request, pk):
     client_to_convert.converted_to_client = True
     client_to_convert.save()
     messages.success(request, f'{client_to_convert.name} теперь клиент!')
-    return redirect('/dashboard/prospective-clients/')
+    return redirect('prospectiveclient:all')

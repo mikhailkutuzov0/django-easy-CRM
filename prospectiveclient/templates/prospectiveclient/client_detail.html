@@ -20,11 +20,11 @@
             <p class="mb-3">{{ client.modified_at }}</p>
         {% endif %}
         <hr class="my-4">
-        <a href="{% url "prospectiveclient:client-convert" client.id %}"
+        <a href="{% url "prospectiveclient:convert" client.id %}"
            class="py-2 px-4 bg-blue-400">Переместить в клиенты</a>
-        <a href="{% url "prospectiveclient:client-edit" client.id %}"
+        <a href="{% url "prospectiveclient:edit" client.id %}"
            class="py-2 px-4 bg-green-300">Изменить</a>
-        <a href="{% url "prospectiveclient:client-delete" client.id %}"
+        <a href="{% url "prospectiveclient:delete" client.id %}"
            class="py-2 px-4 bg-red-500">Удалить клиента</a>
         <hr class="my-4">
         <a href="{% url "prospectiveclient:all" %}"

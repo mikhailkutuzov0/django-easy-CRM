@@ -33,7 +33,7 @@ def add_client(request):
             client.team = team
             client.save()
             messages.success(request, 'Клиент был создан!')
-            return redirect('/dashboard/clients/')
+            return redirect('client:all')
     else:
         form = AddClient()
     return render(request, 'client/add.html', {
@@ -47,7 +47,7 @@ def delete_client(request, pk):
     client = get_object_or_404(Client, created_by=request.user, pk=pk)
     client.delete()
     messages.success(request, 'Клиент был удален!')
-    return redirect('/dashboard/clients/')
+    return redirect('client:all')
 
 
 @login_required
@@ -63,7 +63,7 @@ def edit_client(request, pk):
             messages.success(
                 request, 'Клиент был отредактирован!')
 
-            return redirect('/dashboard/clients/')
+            return redirect('client:all')
     else:
         form = AddClient(instance=client)
 

@@ -5,13 +5,9 @@ app_name = 'prospectiveclient'  # Пространство имен для URL-�
 
 urlpatterns = [
     path('', views.all_prospective_client, name='all'),
-    path('<int:pk>/', views.prospective_client_detail, name='client-detail'),
-    path(
-        '<int:pk>/delete/',
-        views.delete_prospective_client,
-        name='client-delete'
-    ),
-    path('<int:pk>/edit/', views.edit_prospective_client, name='client-edit'),
-    path('<int:pk>/convert/', views.convert_to_client, name='client-convert'),
-    path('add/', views.add_prospective_client, name='add-new'),
+    path('<int:pk>/', views.prospective_client_detail, name='detail'),
+    path('<int:pk>/delete/', views.delete_prospective_client, name='delete'),
+    path('<int:pk>/edit/', views.edit_prospective_client, name='edit'),
+    path('<int:pk>/convert/', views.convert_to_client, name='convert'),
+    path('add/', views.add_prospective_client, name='add'),
 ]

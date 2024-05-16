@@ -13,7 +13,7 @@
                         <h3 class="font-semibold">{{ prospective_client.name }}</h3>
                         <p class="text=xs">Статус: {{ prospective_client.get_status_display }}</p>
                         <p class="text=xs">Приоритет: {{ prospective_client.get_priority_display }}</p>
-                        <a href="{% url "prospectiveclient:client-detail" prospective_client.id %}">Подробнее</a>
+                        <a href="{% url "prospectiveclient:detail" prospective_client.id %}">Подробнее</a>
                     </div>
                 {% endfor %}
             </div>
@@ -22,7 +22,7 @@
                 {% for client in clients %}
                     <div class="mb-2">
                         <h3 class="font-semibold">{{ client.name }}</h3>
-                        <a href="{% url "client:client-detail" client.id %}">Подробнее</a>
+                        <a href="{% url "client:detail" client.id %}">Подробнее</a>
                     </div>
                 {% endfor %}
             </div>
