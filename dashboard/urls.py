@@ -5,5 +5,5 @@ app_name = 'dashboard'  # Пространство имен для URL-адре�
 
 urlpatterns = [
     # Главная страница:
-    path('', views.dashboard, name='dashboard'),
+    path('', views.dashboard, name='index'),
 ]

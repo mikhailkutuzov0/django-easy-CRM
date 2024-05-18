@@ -7,13 +7,13 @@
         <h1 class="mb-4 text-xl">Все потенциальные клиенты</h1>
         <a href="{% url "prospectiveclient:add" %}"
            class="inline-block py-4 px-6 bg-yellow-300">Добавить нового потенциального клиента</a>
-        {% if all_clients %}
+        {% if object_list %}
             <div class="mt-6  flex justify-between">
                 <p class="py-4 px-2 bg-green-300 font-semibold w-full">Имя</p>
                 <p class="py-4 px-2 bg-green-300 font-semibold w-full">Приоритет</p>
                 <p class="py-4 px-2 bg-green-300 font-semibold w-full">Статус</p>
             </div>
-            {% for client in all_clients %}
+            {% for client in object_list %}
                 <div class="flex justify-between">
                     <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">
                         <a href="{% url "prospectiveclient:detail" client.id %}">{{ client.name }}</a>

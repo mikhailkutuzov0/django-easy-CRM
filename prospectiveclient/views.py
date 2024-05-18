@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import ListView, DetailView
 
 from team.models import Team
 from .forms import AddProspectiveClient
@@ -8,23 +10,36 @@ from .models import ProspectiveClient
 from client.models import Client
 
 
-@login_required
-def all_prospective_client(request):
-    all_clients = ProspectiveClient.objects.filter(
-        created_by=request.user, converted_to_client=False)
-    return render(request,
-                  'prospectiveclient/all.html', {'all_clients': all_clients}
-                  )
+class ProspectiveClientListView(ListView):
+    model = ProspectiveClient
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ProspectiveClientListView, self).get_queryset()
+
+        return queryset.filter(
+            created_by=self.request.user, converted_to_client=False
+        )
 
 
-@login_required
-def prospective_client_detail(request, pk):
-    client = get_object_or_404(
-        ProspectiveClient, created_by=request.user, pk=pk)
+class ProspectiveClientDetailView(DetailView):
+    model = ProspectiveClient
 
-    return render(
-        request, 'prospectiveclient/client_detail.html', {'client': client}
-    )
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ProspectiveClientDetailView, self).get_queryset()
+
+        return queryset.filter(
+            created_by=self.request.user, pk=self.kwargs.get('pk')
+        )
 
 
 @login_required
