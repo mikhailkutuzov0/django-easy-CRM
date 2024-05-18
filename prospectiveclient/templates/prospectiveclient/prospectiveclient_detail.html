@@ -20,11 +20,17 @@
             <p class="mb-3">{{ prospectiveclient.modified_at }}</p>
         {% endif %}
         <hr class="my-4">
+        <form id="prospectiveclient_delete_form"
+              method="post"
+              action="{% url "prospectiveclient:delete" prospectiveclient.pk %}">
+            {% csrf_token %}
+        </form>
         <a href="{% url "prospectiveclient:convert" prospectiveclient.pk %}"
            class="py-2 px-4 bg-blue-400">Переместить в клиенты</a>
         <a href="{% url "prospectiveclient:edit" prospectiveclient.pk %}"
            class="py-2 px-4 bg-green-300">Изменить</a>
-        <a href="{% url "prospectiveclient:delete" prospectiveclient.pk %}"
+        <a href="#"
+           onclick="document.getElementById('prospectiveclient_delete_form').submit();"
            class="py-2 px-4 bg-red-500">Удалить клиента</a>
         <hr class="my-4">
         <a href="{% url "prospectiveclient:all" %}"

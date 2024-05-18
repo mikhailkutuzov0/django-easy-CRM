@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+    Редактировать клиента
+{% endblock title %}
+{% block content %}
+    <div class="py-6 px-6">
+        <h1>{{ title }}</h1>
+        {% if team.client_team_access.max_prospective_clients > team.prospectiveclients.count or  title == "Изменить потенциального клиента" %}
+            <form method="post" action=".">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
+            </form>
+        {% else %}
+            <div class="mt-6 px-6 py-4 bg-red-400 rounded-xl text-white">Лимит был исчерпан!</div>
+        {% endif %}
+    </div>
+{% endblock content %}

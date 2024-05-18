@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.views.generic import (
+    ListView, DetailView, DeleteView, UpdateView, CreateView
+)
 
 from team.models import Team
-from .forms import AddProspectiveClient
 from .models import ProspectiveClient
 from client.models import Client
 
@@ -42,72 +45,95 @@ class ProspectiveClientDetailView(DetailView):
         )
 
 
-@login_required
-def delete_prospective_client(request, pk):
-    client = get_object_or_404(
-        ProspectiveClient, created_by=request.user, pk=pk)
-    client.delete()
-    messages.success(request, 'Потенциальный клиент был удален!')
-    return redirect('prospectiveclient:all')
+class ProspectiveClientDeleteView(DeleteView):
+    model = ProspectiveClient
+
+    success_url = reverse_lazy('prospectiveclient:all')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ProspectiveClientDeleteView, self).get_queryset()
+
+        return queryset.filter(
+            created_by=self.request.user, pk=self.kwargs.get('pk')
+        )
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
-@login_required
-def add_prospective_client(request):
-    team = Team.objects.filter(created_by=request.user)[0]
-    if request.method == 'POST':
-        form = AddProspectiveClient(request.POST)
+class ProspectiveClientCreateView(CreateView):
+    model = ProspectiveClient
+    fields = ('name', 'email', 'description', 'priority', 'status',)
+    success_url = reverse_lazy('prospectiveclient:all')
 
-        if form.is_valid():
-            team = Team.objects.filter(created_by=request.user)[0]
-            client = form.save(commit=False)
-            client.created_by = request.user
-            client.team = team
-            client.save()
-            messages.success(request, 'Потенциальный клиент был создан!')
-            return redirect('prospectiveclient:all')
-    else:
-        form = AddProspectiveClient()
-    return render(request, 'prospectiveclient/add.html', {
-        'form': form,
-        'team': team,
-    })
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
 
+        return super().dispatch(*args, **kwargs)
 
-@login_required
-def edit_prospective_client(request, pk):
-    client = get_object_or_404(
-        ProspectiveClient, created_by=request.user, pk=pk)
-    if request.method == 'POST':
-        form = AddProspectiveClient(request.POST, instance=client)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        team = Team.objects.filter(created_by=self.request.user)[0]
+        context['team'] = team
+        context['title'] = 'Добавить потенциального клиента'
 
-        if form.is_valid():
-            form.save()
+        return context
 
-            messages.success(
-                request, 'Клиент был отредактирован!')
+    def form_valid(self, form):
+        team = Team.objects.filter(created_by=self.request.user)[0]
+        self.object = form.save(commit=False)
+        self.object.created_by = self.request.user
+        self.object.team = team
+        self.object.save()
 
-            return redirect('prospectiveclient:all')
-    else:
-        form = AddProspectiveClient(instance=client)
-
-    return render(request, 'prospectiveclient/edit_client.html', {
-        'form': form
-    })
+        return redirect(self.success_url)
 
 
-@login_required
-def convert_to_client(request, pk):
-    client_to_convert = get_object_or_404(
-        ProspectiveClient, created_by=request.user, pk=pk)
-    team = Team.objects.filter(created_by=request.user)[0]
-    Client.objects.create(
-        name=client_to_convert.name,
-        email=client_to_convert.email,
-        team=team,
-        description=client_to_convert.description,
-        created_by=request.user
-    )
-    client_to_convert.converted_to_client = True
-    client_to_convert.save()
-    messages.success(request, f'{client_to_convert.name} теперь клиент!')
-    return redirect('prospectiveclient:all')
+class ProspectiveClientUpdateView(UpdateView):
+    model = ProspectiveClient
+    fields = ('name', 'email', 'description', 'priority', 'status',)
+    success_url = reverse_lazy('prospectiveclient:all')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+
+        return super().dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Изменить потенциального клиента'
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(ProspectiveClientUpdateView, self).get_queryset()
+
+        return queryset.filter(
+            created_by=self.request.user, pk=self.kwargs.get('pk')
+        )
+
+
+class ConvertToClientView(View):
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        client_to_convert = get_object_or_404(
+            ProspectiveClient, created_by=request.user, pk=pk
+        )
+        team = Team.objects.filter(created_by=request.user)[0]
+        Client.objects.create(
+            name=client_to_convert.name,
+            email=client_to_convert.email,
+            team=team,
+            description=client_to_convert.description,
+            created_by=request.user
+        )
+        client_to_convert.converted_to_client = True
+        client_to_convert.save()
+        messages.success(request, f'{client_to_convert.name} теперь клиент!')
+
+        return redirect('prospectiveclient:all')
