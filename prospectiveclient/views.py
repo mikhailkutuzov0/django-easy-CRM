@@ -8,9 +8,10 @@ from django.views.generic import (
     ListView, DetailView, DeleteView, UpdateView, CreateView
 )
 
+from .forms import AddCommentForm
 from team.models import Team
 from .models import ProspectiveClient
-from client.models import Client
+from client.models import Client, Comment as ClientComment
 
 
 class ProspectiveClientListView(ListView):
@@ -36,6 +37,12 @@ class ProspectiveClientDetailView(DetailView):
     def dispatch(self, *args, **kwargs):
 
         return super().dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = AddCommentForm()
+
+        return context
 
     def get_queryset(self):
         queryset = super(ProspectiveClientDetailView, self).get_queryset()
@@ -118,6 +125,20 @@ class ProspectiveClientUpdateView(UpdateView):
         )
 
 
+class AddCommentView(View):
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            team = Team.objects.filter(created_by=self.request.user)[0]
+            comment = form.save(commit=False)
+            comment.team = team
+            comment.created_by = request.user
+            comment.prospectiveclient_id = pk
+            comment.save()
+        return redirect('prospectiveclient:detail', pk=pk)
+
+
 class ConvertToClientView(View):
     def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
@@ -125,7 +146,7 @@ class ConvertToClientView(View):
             ProspectiveClient, created_by=request.user, pk=pk
         )
         team = Team.objects.filter(created_by=request.user)[0]
-        Client.objects.create(
+        client = Client.objects.create(
             name=client_to_convert.name,
             email=client_to_convert.email,
             team=team,
@@ -134,6 +155,16 @@ class ConvertToClientView(View):
         )
         client_to_convert.converted_to_client = True
         client_to_convert.save()
+
+        comments = client_to_convert.comments.all()
+        for comment in comments:
+            ClientComment.objects.create(
+                client=client,
+                content=comment.content,
+                created_by=comment.created_by,
+                team=team,
+            )
+
         messages.success(request, f'{client_to_convert.name} теперь клиент!')
 
         return redirect('prospectiveclient:all')

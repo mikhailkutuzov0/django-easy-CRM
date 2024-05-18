@@ -21,6 +21,22 @@
         <a href="{% url "client:delete" client.id %}"
            class="py-2 px-4 bg-red-500">Удалить клиента</a>
         <hr class="my-4">
+        <h2 class="mb-6 text-3xl">Комментарии</h2>
+        <div class="space-y-4">
+            {% for comment in client.comments.all %}
+                <p>
+                    <strong class="mb-2">{{ comment.created_by }}</strong>
+                </p>
+                {{ comment.created_at }}
+                <div class="bg-gray-100 py-6 px-6 rounded-xl">{{ comment.content }}</div>
+            {% endfor %}
+        </div>
+        <form method="post" action="{% url "client:add_comment" client.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="py-2 px-4 bg-blue-400">Отправить</button>
+        </form>
+        <hr class="my-4">
         <a href="{% url "client:all" %}"
            class="inline-block py-4 px-6 bg-yellow-300">Назад к списку клиентов</a>
     </div>

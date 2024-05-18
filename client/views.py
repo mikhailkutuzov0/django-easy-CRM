@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from team.models import Team
 from .models import Client
-from .forms import AddClient
+from .forms import AddClient, AddCommentForm
 
 
 @login_required
@@ -17,7 +17,29 @@ def all_clients(request):
 @login_required
 def client_detail(request, pk):
     client = get_object_or_404(Client, created_by=request.user, pk=pk)
-    return render(request, 'client/client_detail.html', {'client': client})
+    team = Team.objects.filter(created_by=request.user)[0]
+
+    if request.method == 'POST':
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.team = team
+            comment.created_by = request.user
+            comment.client = client
+            comment.save()
+
+            return redirect('client:detail', pk=pk)
+    else:
+        form = AddCommentForm()
+
+    return render(
+        request,
+        'client/client_detail.html',
+        {
+            'client': client,
+            'form': form
+        }
+    )
 
 
 @login_required

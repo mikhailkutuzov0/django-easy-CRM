@@ -25,5 +25,10 @@ urlpatterns = [
         views.ConvertToClientView.as_view(),
         name='convert'
     ),
+    path(
+        '<int:pk>/add-comment/',
+        views.AddCommentView.as_view(),
+        name='add_comment'
+    ),
     path('add/', views.ProspectiveClientCreateView.as_view(), name='add'),
 ]
