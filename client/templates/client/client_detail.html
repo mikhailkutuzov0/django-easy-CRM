@@ -37,6 +37,26 @@
             <button class="py-2 px-4 bg-blue-400">Отправить</button>
         </form>
         <hr class="my-4">
+        <h2 class="mb-6 text-3xl">Файлы</h2>
+        <div class="space-y-4">
+            {% for file in client.files.all %}
+                <p>
+                    <strong class="mb-2">{{ file.created_by }}</strong>
+                </p>
+                {{ file.created_at }}
+                <div class="bg-gray-100 py-6 px-6 rounded-xl">
+                    <a href="{{ file.file.url }}">Загрузить файл</a>
+                </div>
+            {% endfor %}
+        </div>
+        <form method="post"
+              action="{% url "client:add_file" client.id %}"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ fileform.as_p }}
+            <button class="py-2 px-4 bg-blue-400">Отправить</button>
+        </form>
+        <hr class="my-4">
         <a href="{% url "client:all" %}"
            class="inline-block py-4 px-6 bg-yellow-300">Назад к списку клиентов</a>
     </div>

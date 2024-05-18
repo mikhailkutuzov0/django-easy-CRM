@@ -35,6 +35,41 @@ class Client(models.Model):
         return self.name
 
 
+class ClientFile(models.Model):
+    team = models.ForeignKey(
+        Team,
+        related_name='clients_files',
+        on_delete=models.CASCADE,
+        verbose_name='Команда клиента'
+    )
+    client = models.ForeignKey(
+        Client,
+        related_name='files',
+        on_delete=models.CASCADE,
+        verbose_name='Для кого оставлен файл'
+    )
+    file = models.FileField(
+        upload_to='clients_files',
+        verbose_name='Файл'
+    )
+    created_by = models.ForeignKey(
+        User,
+        related_name='clients_files',
+        on_delete=models.CASCADE,
+        verbose_name='Загружено кем'
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Создано в')
+
+    class Meta():
+        db_table = 'client_files'
+        verbose_name = 'Файл для клиента'
+        verbose_name_plural = 'Файлы для клиентов'
+
+    def __str__(self):
+        return f'{self.created_by} - {self.file}'
+
+
 class Comment(models.Model):
     team = models.ForeignKey(
         Team,

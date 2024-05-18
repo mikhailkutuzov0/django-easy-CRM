@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from team.models import Team
 from .models import Client
-from .forms import AddClient, AddCommentForm
+from .forms import AddClient, AddCommentForm, AddFileForm
 
 
 @login_required
@@ -12,6 +12,23 @@ def all_clients(request):
     clients = Client.objects.filter(created_by=request.user)
 
     return render(request, 'client/all.html', {'clients': clients})
+
+
+@login_required
+def client_add_file(request, pk):
+    if request.method == 'POST':
+        form = AddFileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            team = Team.objects.filter(created_by=request.user)[0]
+            file = form.save(commit=False)
+            file.team = team
+            file.client_id = pk
+            file.created_by = request.user
+            file.save()
+
+            return redirect('client:detail', pk=pk)
+    return redirect('client:detail', pk=pk)
 
 
 @login_required
@@ -37,7 +54,8 @@ def client_detail(request, pk):
         'client/client_detail.html',
         {
             'client': client,
-            'form': form
+            'form': form,
+            'fileform': AddFileForm(),
         }
     )
 

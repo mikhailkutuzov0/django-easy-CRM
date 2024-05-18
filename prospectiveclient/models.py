@@ -87,6 +87,41 @@ class ProspectiveClient(models.Model):
         return f'{self.name} | {self.status} | {self.priority}'
 
 
+class ProspectiveClientFile(models.Model):
+    team = models.ForeignKey(
+        Team,
+        related_name='prospectiveclients_files',
+        on_delete=models.CASCADE,
+        verbose_name='Команда потенциального клиента'
+    )
+    prospectiveclient = models.ForeignKey(
+        ProspectiveClient,
+        related_name='files',
+        on_delete=models.CASCADE,
+        verbose_name='Для кого оставлен файл'
+    )
+    file = models.FileField(
+        upload_to='prospective_clients_files',
+        verbose_name='Файл'
+    )
+    created_by = models.ForeignKey(
+        User,
+        related_name='prospectiveclients_files',
+        on_delete=models.CASCADE,
+        verbose_name='Загружено кем'
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Создано в')
+
+    class Meta():
+        db_table = 'prospective_client_files'
+        verbose_name = 'Файл для потенциального клиента'
+        verbose_name_plural = 'Файлы для потенциальных клиентов'
+
+    def __str__(self):
+        return f'{self.created_by} - {self.file}'
+
+
 class Comment(models.Model):
     team = models.ForeignKey(
         Team,

@@ -8,7 +8,7 @@ from django.views.generic import (
     ListView, DetailView, DeleteView, UpdateView, CreateView
 )
 
-from .forms import AddCommentForm
+from .forms import AddCommentForm, AddFileForm
 from team.models import Team
 from .models import ProspectiveClient
 from client.models import Client, Comment as ClientComment
@@ -41,7 +41,7 @@ class ProspectiveClientDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = AddCommentForm()
-
+        context['fileform'] = AddFileForm()
         return context
 
     def get_queryset(self):
@@ -123,6 +123,22 @@ class ProspectiveClientUpdateView(UpdateView):
         return queryset.filter(
             created_by=self.request.user, pk=self.kwargs.get('pk')
         )
+
+
+class AddFileView(View):
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        form = AddFileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            team = Team.objects.filter(created_by=self.request.user)[0]
+            file = form.save(commit=False)
+            file.team = team
+            file.prospectiveclient_id = pk
+            file.created_by = request.user
+            file.save()
+
+        return redirect('prospectiveclient:detail', pk=pk)
 
 
 class AddCommentView(View):

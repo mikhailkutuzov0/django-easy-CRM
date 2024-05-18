@@ -163,3 +163,4 @@ cython_debug/
 #ide stuff
 .vscode
 .idea
+media

@@ -30,5 +30,10 @@ urlpatterns = [
         views.AddCommentView.as_view(),
         name='add_comment'
     ),
+    path(
+        '<int:pk>/add-file/',
+        views.AddFileView.as_view(),
+        name='add_file'
+    ),
     path('add/', views.ProspectiveClientCreateView.as_view(), name='add'),
 ]
