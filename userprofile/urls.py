@@ -17,7 +17,9 @@ urlpatterns = [
         ),
         name='login'
     ),
+    # Просмотр профиля
     path('my-account/', views.my_account, name='my-account'),
+    # Выход из профиля
     path('logout/',  Views.LogoutView.as_view(), name='logout'),
 
 ]

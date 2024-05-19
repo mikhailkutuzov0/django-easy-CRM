@@ -9,6 +9,15 @@ from .forms import AddClientForm, AddCommentForm, AddFileForm
 
 @login_required
 def client_export(request):
+    """
+    Экспортирует список клиентов в формате CSV.
+
+    Args:
+        request (HttpRequest): Запрос, с информацией о текущем пользователе.
+
+    Returns:
+        HttpResponse: Ответ с прикрепленным CSV файлом.
+    """
     team = request.user.userprofile.active_team
     clients = team.clients.all()
 
@@ -29,6 +38,15 @@ def client_export(request):
 
 @login_required
 def all_clients(request):
+    """
+    Отображает список всех клиентов для текущей команды.
+
+    Args:
+        request (HttpRequest): Запрос, с информацией о текущем пользователе.
+
+    Returns:
+        HttpResponse: Ответ, содержащий HTML шаблон с списком клиентов.
+    """
     team = request.user.userprofile.active_team
     clients = team.clients.all()
 
@@ -37,6 +55,16 @@ def all_clients(request):
 
 @login_required
 def client_add_file(request, pk):
+    """
+    Добавляет файл к клиенту.
+
+    Args:
+        request (HttpRequest): Запрос, с информацию о текущем пользователе.
+        pk (int): Первичный ключ клиента.
+
+    Returns:
+        HttpResponse: Перенаправление на страницу деталей клиента.
+    """
     if request.method == 'POST':
         form = AddFileForm(request.POST, request.FILES)
 
@@ -53,6 +81,16 @@ def client_add_file(request, pk):
 
 @login_required
 def client_detail(request, pk):
+    """
+    Отображает детали клиента и позволяет добавлять комментарии и файлы.
+
+    Args:
+        request (HttpRequest): Запрос, с информацией о текущем пользователе.
+        pk (int): Первичный ключ клиента.
+
+    Returns:
+        HttpResponse: Ответ, содержащий HTML шаблон с деталями клиента.
+    """
     team = request.user.userprofile.active_team
     client = get_object_or_404(team.clients, pk=pk)
 
@@ -82,6 +120,16 @@ def client_detail(request, pk):
 
 @login_required
 def add_client(request):
+    """
+    Добавляет нового клиента.
+
+    Args:
+        request (HttpRequest): Запрос, c информацией о текущем пользователе.
+
+    Returns:
+        HttpResponse: Перенаправление на страницу со списком всех клиентов
+                      или HTML шаблон формы добавления клиента.
+    """
     team = request.user.userprofile.get_active_team()
 
     if request.method == 'POST':
@@ -104,6 +152,16 @@ def add_client(request):
 
 @login_required
 def delete_client(request, pk):
+    """
+    Удаляет клиента.
+
+    Args:
+        request (HttpRequest): Запрос, с информацией о текущем пользователе.
+        pk (int): Первичный ключ клиента.
+
+    Returns:
+        HttpResponse: Перенаправление на страницу со списком всех клиентов.
+    """
     team = request.user.userprofile.active_team
     client = get_object_or_404(team.clients, pk=pk)
     client.delete()
@@ -113,6 +171,17 @@ def delete_client(request, pk):
 
 @login_required
 def edit_client(request, pk):
+    """
+    Редактирует данные клиента.
+
+    Args:
+        request (HttpRequest): Запрос, с информацией о текущем пользователе.
+        pk (int): Первичный ключ клиента.
+
+    Returns:
+        HttpResponse: Перенаправление на страницу со списком всех клиентов
+                      или HTML шаблон формы редактирования клиента.
+    """
     team = request.user.userprofile.active_team
     client = get_object_or_404(team.clients, pk=pk)
 

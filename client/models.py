@@ -4,6 +4,18 @@ from team.models import Team
 
 
 class Client(models.Model):
+    """
+    Модель для представления клиента.
+
+    Attributes:
+        team (ForeignKey): Ссылка на команду, к которой относится клиент.
+        name (CharField): Имя клиента.
+        email (EmailField): Электронная почта клиента.
+        description (TextField): Описание клиента.
+        created_by (ForeignKey): Пользователь, создавший запись о клиенте.
+        created_at (DateTimeField): Дата и время создания записи.
+        modified_at (DateTimeField): Дата и время последнего изменения записи.
+    """
     team = models.ForeignKey(
         Team,
         related_name='clients',
@@ -36,6 +48,16 @@ class Client(models.Model):
 
 
 class ClientFile(models.Model):
+    """
+    Модель для представления файла клиента.
+
+    Attributes:
+        team (ForeignKey): Ссылка на команду клиента.
+        client (ForeignKey): Ссылка на клиента, для которого загружается файл.
+        file (FileField): Загружаемый файл.
+        created_by (ForeignKey): Пользователь, загрузивший файл.
+        created_at (DateTimeField): Дата и время загрузки файла.
+    """
     team = models.ForeignKey(
         Team,
         related_name='clients_files',
@@ -71,6 +93,16 @@ class ClientFile(models.Model):
 
 
 class Comment(models.Model):
+    """
+    Модель для представления комментария к клиенту.
+
+    Attributes:
+        team (ForeignKey): Ссылка на команду клиента.
+        client (ForeignKey): Ссылка на клиента, для которого оставлен комментарий.
+        content (TextField): Содержание комментария.
+        created_by (ForeignKey): Пользователь, создавший комментарий.
+        created_at (DateTimeField): Дата и время создания комментария.
+    """
     team = models.ForeignKey(
         Team,
         related_name='lients_comments',

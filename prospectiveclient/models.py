@@ -88,6 +88,17 @@ class ProspectiveClient(models.Model):
 
 
 class ProspectiveClientFile(models.Model):
+    """
+    Модель для представления файла потенциального клиента.
+
+    Attributes:
+        team (ForeignKey): Ссылка на команду потенциального клиента.
+        prospectiveclient (ForeignKey): Ссылка на потенциального клиента,
+                                        для которого загружается файл.
+        file (FileField): Загружаемый файл.
+        created_by (ForeignKey): Пользователь, загрузивший файл.
+        created_at (DateTimeField): Дата и время загрузки файла.
+    """
     team = models.ForeignKey(
         Team,
         related_name='prospectiveclients_files',
@@ -123,6 +134,17 @@ class ProspectiveClientFile(models.Model):
 
 
 class Comment(models.Model):
+    """
+    Модель для представления комментария к потенциальному клиенту.
+
+    Attributes:
+        team (ForeignKey): Ссылка на команду потенциального клиента.
+        prospectiveclient (ForeignKey): Ссылка на потенциального клиента,
+                                        для которого оставлен комментарий.
+        content (TextField): Содержание комментария.
+        created_by (ForeignKey): Пользователь, создавший комментарий.
+        created_at (DateTimeField): Дата и время создания комментария.
+    """
     team = models.ForeignKey(
         Team,
         related_name='prospectiveclients_comments',

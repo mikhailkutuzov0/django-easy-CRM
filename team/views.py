@@ -7,6 +7,15 @@ from .forms import TeamForm
 
 @login_required
 def all_teams(request):
+    """
+    Отображает список всех команд пользователя.
+
+    Args:
+        request (HttpRequest): Запрос, с информацией о текущем пользователе.
+
+    Returns:
+        HttpResponse: Ответ, содержащий HTML шаблон со списком команд.
+    """
     teams = Team.objects.filter(members__in=[request.user])
 
     return render(request, 'team/all_teams.html', {'teams': teams})
@@ -14,6 +23,16 @@ def all_teams(request):
 
 @login_required
 def detail(request, pk):
+    """
+    Отображает детали команды.
+
+    Args:
+        request (HttpRequest): Запрос, с информацией о текущем пользователе.
+        pk (int): Первичный ключ команды.
+
+    Returns:
+        HttpResponse: Ответ, содержащий HTML шаблон с деталями команды.
+    """
     team = get_object_or_404(Team, members__in=[request.user], pk=pk)
 
     return render(request, 'team/detail.html', {'team': team})

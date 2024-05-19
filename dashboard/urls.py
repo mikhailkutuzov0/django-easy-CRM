@@ -4,6 +4,6 @@ from . import views
 app_name = 'dashboard'  # Пространство имен для URL-адресов
 
 urlpatterns = [
-    # Главная страница:
+    # URL для отображения панели :
     path('', views.dashboard, name='index'),
 ]

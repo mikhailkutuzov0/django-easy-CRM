@@ -5,6 +5,13 @@ from team.models import Team
 
 
 class UserProfile(models.Model):
+    """
+    Модель для представления профиля пользователя.
+
+    Attributes:
+        user (OneToOneField): Пользователь, связанный с профилем.
+        active_team (ForeignKey): Активная команда пользователя.
+    """
     user = models.OneToOneField(
         User, related_name='userprofile', on_delete=models.CASCADE)
     active_team = models.ForeignKey(
@@ -15,6 +22,12 @@ class UserProfile(models.Model):
     )
 
     def get_active_team(self):
+        """
+        Возвращает активную команду пользователя.
+
+        Returns:
+            Team: Активная команда пользователя.
+        """
         if self.active_team:
             return self.active_team
         else:

@@ -7,6 +7,12 @@ class ClientTeamAccess(models.Model):
     """
     Модель ClientTeamAccess представляет доступ командам к клиентам в
     системе. Дает возможность ограничить максимальное количество клиентов.
+    Attributes:
+        name (CharField): Название доступа.
+        description (TextField): Описание доступа.
+        max_prospective_clients (IntegerField): Максимальное количество
+                                                потенциальных клиентов.
+        max_clients (IntegerField): Максимальное количество клиентов.
     """
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
@@ -23,6 +29,16 @@ class ClientTeamAccess(models.Model):
 
 
 class Team(models.Model):
+    """
+    Модель для представления команды.
+
+    Attributes:
+        client_team_access (ForeignKey): Ссылка на доступ к клиентам.
+        name (CharField): Название команды.
+        members (ManyToManyField): Участники команды.
+        created_by (ForeignKey): Пользователь, создавший команду.
+        created_at (DateTimeField): Время создания команды.
+    """
     client_team_access = models.ForeignKey(
         ClientTeamAccess,
         related_name='teams',
@@ -48,6 +64,12 @@ class Team(models.Model):
         verbose_name_plural: str = 'Команды'
 
     def get_client_team_access(self):
+        """
+        Возвращает доступ к клиентам для команды.
+
+        Returns:
+            ClientTeamAccess: Доступ к клиентам.
+        """
         if self.client_team_access:
             return self.client_team_access
         else:
