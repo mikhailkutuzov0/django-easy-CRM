@@ -9,7 +9,7 @@
             <strong>Имя пользователя:</strong> {{ request.user.username }}
         </p>
         <p class="mb-2">
-            <strong>Команда:</strong> {{ team.name }}
+            <strong>Команда:</strong><a href="{% url "team:detail" active_team.id %}">{{ active_team.name }}</a>
             {% if team.created_by == request.user %}
                 <div>
                     <a href="{% url "team:edit" team.id %}">Изменить</a>

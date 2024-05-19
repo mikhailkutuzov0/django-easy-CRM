@@ -1,25 +1,27 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 
 from team.models import Team
+from userprofile.forms import SignupForm
 
 from .models import UserProfile
 
 
 def registration(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
-            UserProfile.objects.create(user=user)
             team = Team.objects.create(
-                name='Team name', created_by=request.user)
-            team.members.add(request.user)
+                name='Team name', created_by=user)
+            team.members.add(user)
             team.save()
+
+            UserProfile.objects.create(user=user, active_team=team)
+
             return redirect('/user/login/')
     else:
-        form = UserCreationForm(request.POST)
+        form = SignupForm(request.POST)
 
     return render(request, 'userprofile/registration.html', {'form': form})
 

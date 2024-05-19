@@ -26,6 +26,8 @@ class Team(models.Model):
     client_team_access = models.ForeignKey(
         ClientTeamAccess,
         related_name='teams',
+        blank=True,
+        null=True,
         on_delete=models.CASCADE,
         verbose_name='Доступ к клиентам')
     name = models.CharField(max_length=100, verbose_name='Название')

@@ -1,7 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import (
@@ -14,13 +13,8 @@ from .models import ProspectiveClient
 from client.models import Client, Comment as ClientComment
 
 
-class ProspectiveClientListView(ListView):
+class ProspectiveClientListView(LoginRequiredMixin, ListView):
     model = ProspectiveClient
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-
-        return super().dispatch(*args, **kwargs)
 
     def get_queryset(self):
         queryset = super(ProspectiveClientListView, self).get_queryset()
@@ -30,13 +24,8 @@ class ProspectiveClientListView(ListView):
         )
 
 
-class ProspectiveClientDetailView(DetailView):
+class ProspectiveClientDetailView(LoginRequiredMixin, DetailView):
     model = ProspectiveClient
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-
-        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -52,15 +41,10 @@ class ProspectiveClientDetailView(DetailView):
         )
 
 
-class ProspectiveClientDeleteView(DeleteView):
+class ProspectiveClientDeleteView(LoginRequiredMixin, DeleteView):
     model = ProspectiveClient
 
     success_url = reverse_lazy('prospectiveclient:all')
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-
-        return super().dispatch(*args, **kwargs)
 
     def get_queryset(self):
         queryset = super(ProspectiveClientDeleteView, self).get_queryset()
@@ -73,15 +57,10 @@ class ProspectiveClientDeleteView(DeleteView):
         return self.post(request, *args, **kwargs)
 
 
-class ProspectiveClientCreateView(CreateView):
+class ProspectiveClientCreateView(LoginRequiredMixin, CreateView):
     model = ProspectiveClient
     fields = ('name', 'email', 'description', 'priority', 'status',)
     success_url = reverse_lazy('prospectiveclient:all')
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-
-        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -101,15 +80,10 @@ class ProspectiveClientCreateView(CreateView):
         return redirect(self.success_url)
 
 
-class ProspectiveClientUpdateView(UpdateView):
+class ProspectiveClientUpdateView(LoginRequiredMixin, UpdateView):
     model = ProspectiveClient
     fields = ('name', 'email', 'description', 'priority', 'status',)
     success_url = reverse_lazy('prospectiveclient:all')
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-
-        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -125,7 +99,7 @@ class ProspectiveClientUpdateView(UpdateView):
         )
 
 
-class AddFileView(View):
+class AddFileView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         form = AddFileForm(request.POST, request.FILES)
@@ -141,7 +115,7 @@ class AddFileView(View):
         return redirect('prospectiveclient:detail', pk=pk)
 
 
-class AddCommentView(View):
+class AddCommentView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         form = AddCommentForm(request.POST)
@@ -155,7 +129,7 @@ class AddCommentView(View):
         return redirect('prospectiveclient:detail', pk=pk)
 
 
-class ConvertToClientView(View):
+class ConvertToClientView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
         client_to_convert = get_object_or_404(

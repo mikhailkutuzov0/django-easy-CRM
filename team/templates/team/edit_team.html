@@ -4,7 +4,7 @@
 {% endblock title %}
 {% block content %}
     <div class="py-6 px-6">
-        <h1>Изменить команду - {{ team.name }}</h1>
+        <h1 class="text-xl">Изменить команду - {{ team.name }}</h1>
         <form method="post" action=".">
             {% csrf_token %}
             {{ form.as_p }}
