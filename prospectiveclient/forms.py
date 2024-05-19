@@ -1,14 +1,14 @@
 from django import forms
-from .models import ProspectiveClient, Comment, ProspectiveClientFile
 
-
-class AddProspectiveClient(forms.ModelForm):
-    class Meta:
-        model = ProspectiveClient
-        fields = ('name', 'email', 'description', 'priority', 'status',)
+from .models import Comment, ProspectiveClientFile
 
 
 class AddCommentForm(forms.ModelForm):
+    content = forms.CharField(
+        widget=forms.Textarea(
+            attrs={"rows": "5", "class": "w-full bg-gray-100 rounded-xl"})
+    )
+
     class Meta:
         model = Comment
         fields = ('content',)

@@ -6,12 +6,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from team.models import Team
 from .models import Client
-from .forms import AddClient, AddCommentForm, AddFileForm
+from .forms import AddClientForm, AddCommentForm, AddFileForm
 
 
 @login_required
 def client_export(request):
-    clients = Client.objects.filter(created_by=request.user)
+    team = request.user.userprofile.active_team
+    clients = team.clients.all()
 
     response = HttpResponse(
         content_type='text/csv',
@@ -30,7 +31,8 @@ def client_export(request):
 
 @login_required
 def all_clients(request):
-    clients = Client.objects.filter(created_by=request.user)
+    team = request.user.userprofile.active_team
+    clients = team.clients.all()
 
     return render(request, 'client/all.html', {'clients': clients})
 
@@ -41,9 +43,8 @@ def client_add_file(request, pk):
         form = AddFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            team = Team.objects.filter(created_by=request.user)[0]
             file = form.save(commit=False)
-            file.team = team
+            file.team = request.user.userprofile.get_active_team()
             file.client_id = pk
             file.created_by = request.user
             file.save()
@@ -54,14 +55,14 @@ def client_add_file(request, pk):
 
 @login_required
 def client_detail(request, pk):
-    client = get_object_or_404(Client, created_by=request.user, pk=pk)
-    team = Team.objects.filter(created_by=request.user)[0]
+    team = request.user.userprofile.active_team
+    client = get_object_or_404(team.clients, pk=pk)
 
     if request.method == 'POST':
         form = AddCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.team = team
+            comment.team = request.user.userprofile.get_active_team()
             comment.created_by = request.user
             comment.client = client
             comment.save()
@@ -83,12 +84,12 @@ def client_detail(request, pk):
 
 @login_required
 def add_client(request):
-    team = Team.objects.filter(created_by=request.user)[0]
+    team = request.user.userprofile.get_active_team()
+
     if request.method == 'POST':
-        form = AddClient(request.POST)
+        form = AddClientForm(request.POST)
 
         if form.is_valid():
-            team = Team.objects.filter(created_by=request.user)[0]
             client = form.save(commit=False)
             client.created_by = request.user
             client.team = team
@@ -96,7 +97,7 @@ def add_client(request):
             messages.success(request, 'Клиент был создан!')
             return redirect('client:all')
     else:
-        form = AddClient()
+        form = AddClientForm()
     return render(request, 'client/add.html', {
         'form': form,
         'team': team,
@@ -105,7 +106,8 @@ def add_client(request):
 
 @login_required
 def delete_client(request, pk):
-    client = get_object_or_404(Client, created_by=request.user, pk=pk)
+    team = request.user.userprofile.active_team
+    client = get_object_or_404(team.clients, pk=pk)
     client.delete()
     messages.success(request, 'Клиент был удален!')
     return redirect('client:all')
@@ -113,20 +115,20 @@ def delete_client(request, pk):
 
 @login_required
 def edit_client(request, pk):
-    client = get_object_or_404(
-        Client, created_by=request.user, pk=pk)
+    team = request.user.userprofile.active_team
+    client = get_object_or_404(team.clients, pk=pk)
+
     if request.method == 'POST':
-        form = AddClient(request.POST, instance=client)
+        form = AddClientForm(request.POST, instance=client)
 
         if form.is_valid():
             form.save()
 
-            messages.success(
-                request, 'Клиент был отредактирован!')
+            messages.success(request, 'Клиент был отредактирован!')
 
             return redirect('client:all')
     else:
-        form = AddClient(instance=client)
+        form = AddClientForm(instance=client)
 
     return render(request, 'client/edit_client.html', {
         'form': form

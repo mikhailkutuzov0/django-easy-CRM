@@ -31,7 +31,9 @@
                 <div class="bg-gray-100 py-6 px-6 rounded-xl">{{ comment.content }}</div>
             {% endfor %}
         </div>
-        <form method="post" action="{% url "client:add_comment" client.id %}">
+        <form method="post"
+              action="{% url 'client:add_comment' client.id %}"
+              class="my-4">
             {% csrf_token %}
             {{ form.as_p }}
             <button class="py-2 px-4 bg-blue-400">Отправить</button>

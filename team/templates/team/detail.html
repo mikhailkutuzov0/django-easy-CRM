@@ -5,6 +5,7 @@
 {% block content %}
     <div class="py-6 px-6">
         <h1 class="text-xl">{{ team.name }}</h1>
+        <a href="{% url "team:all" %}">Сменить команду</a>
         {% if team.created_by == request.user %}
             <div>
                 <a href="{% url "team:edit" team.id %}">Изменить</a>

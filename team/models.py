@@ -47,5 +47,20 @@ class Team(models.Model):
         verbose_name = 'Команда'
         verbose_name_plural: str = 'Команды'
 
+    def get_client_team_access(self):
+        if self.client_team_access:
+            return self.client_team_access
+        else:
+            if ClientTeamAccess.objects.count() > 0:
+                self.client_team_access = ClientTeamAccess.objects.all().first()
+                self.save()
+            else:
+                client_team_access = ClientTeamAccess.objects.create(
+                    name='First', max_leads=5, max_clients=5)
+                self.client_team_access = client_team_access
+                self.save()
+
+            return self.client_team_access
+
     def __str__(self):
         return self.name

@@ -8,7 +8,6 @@ from django.views.generic import (
 )
 
 from .forms import AddCommentForm, AddFileForm
-from team.models import Team
 from .models import ProspectiveClient
 from client.models import Client, Comment as ClientComment
 
@@ -18,10 +17,9 @@ class ProspectiveClientListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super(ProspectiveClientListView, self).get_queryset()
+        team = self.request.user.userprofile.active_team
 
-        return queryset.filter(
-            created_by=self.request.user, converted_to_client=False
-        )
+        return queryset.filter(team=team, converted_to_client=False)
 
 
 class ProspectiveClientDetailView(LoginRequiredMixin, DetailView):
@@ -35,10 +33,9 @@ class ProspectiveClientDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         queryset = super(ProspectiveClientDetailView, self).get_queryset()
+        team = self.request.user.userprofile.active_team
 
-        return queryset.filter(
-            created_by=self.request.user, pk=self.kwargs.get('pk')
-        )
+        return queryset.filter(team=team, pk=self.kwargs.get('pk'))
 
 
 class ProspectiveClientDeleteView(LoginRequiredMixin, DeleteView):
@@ -48,10 +45,9 @@ class ProspectiveClientDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         queryset = super(ProspectiveClientDeleteView, self).get_queryset()
+        team = self.request.user.userprofile.active_team
 
-        return queryset.filter(
-            created_by=self.request.user, pk=self.kwargs.get('pk')
-        )
+        return queryset.filter(team=team, pk=self.kwargs.get('pk'))
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
@@ -64,17 +60,16 @@ class ProspectiveClientCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        team = Team.objects.filter(created_by=self.request.user)[0]
+        team = self.request.user.userprofile.get_active_team()
         context['team'] = team
         context['title'] = 'Добавить потенциального клиента'
 
         return context
 
     def form_valid(self, form):
-        team = Team.objects.filter(created_by=self.request.user)[0]
         self.object = form.save(commit=False)
         self.object.created_by = self.request.user
-        self.object.team = team
+        self.object.team = self.request.user.userprofile.get_active_team()
         self.object.save()
 
         return redirect(self.success_url)
@@ -93,10 +88,9 @@ class ProspectiveClientUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         queryset = super(ProspectiveClientUpdateView, self).get_queryset()
+        team = self.request.user.userprofile.active_team
 
-        return queryset.filter(
-            created_by=self.request.user, pk=self.kwargs.get('pk')
-        )
+        return queryset.filter(team=team, pk=self.kwargs.get('pk'))
 
 
 class AddFileView(LoginRequiredMixin, View):
@@ -105,9 +99,8 @@ class AddFileView(LoginRequiredMixin, View):
         form = AddFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            team = Team.objects.filter(created_by=self.request.user)[0]
             file = form.save(commit=False)
-            file.team = team
+            file.team = self.request.user.userprofile.get_active_team()
             file.prospectiveclient_id = pk
             file.created_by = request.user
             file.save()
@@ -120,9 +113,8 @@ class AddCommentView(LoginRequiredMixin, View):
         pk = kwargs.get('pk')
         form = AddCommentForm(request.POST)
         if form.is_valid():
-            team = Team.objects.filter(created_by=self.request.user)[0]
             comment = form.save(commit=False)
-            comment.team = team
+            comment.team = self.request.user.userprofile.get_active_team()
             comment.created_by = request.user
             comment.prospectiveclient_id = pk
             comment.save()
@@ -132,21 +124,22 @@ class AddCommentView(LoginRequiredMixin, View):
 class ConvertToClientView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
+        team = self.request.user.userprofile.active_team
         client_to_convert = get_object_or_404(
-            ProspectiveClient, created_by=request.user, pk=pk
-        )
-        team = Team.objects.filter(created_by=request.user)[0]
+            ProspectiveClient, team=team, pk=pk)
+
         client = Client.objects.create(
             name=client_to_convert.name,
             email=client_to_convert.email,
-            team=team,
             description=client_to_convert.description,
-            created_by=request.user
+            created_by=request.user,
+            team=team,
         )
         client_to_convert.converted_to_client = True
         client_to_convert.save()
 
         comments = client_to_convert.comments.all()
+
         for comment in comments:
             ClientComment.objects.create(
                 client=client,
