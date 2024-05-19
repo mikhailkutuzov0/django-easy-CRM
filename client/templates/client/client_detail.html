@@ -3,10 +3,10 @@
     {{ client.name }}
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1 class="mb-4 text-xl">{{ client.name }}</h1>
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="mb-4 text-2xl font-semibold">{{ client.name }}</h1>
         {% if client.description %}
-            <p class="font.semibold">Описание</p>
+            <p class="font-semibold">Описание</p>
             <p class="mb-3">{{ client.description }}</p>
         {% endif %}
         <p class="font-semibold">Дата создания</p>
@@ -16,18 +16,20 @@
             <p class="mb-3">{{ client.modified_at }}</p>
         {% endif %}
         <hr class="my-4">
-        <a href="{% url "client:edit" client.id %}"
-           class="py-2 px-4 bg-green-300">Изменить</a>
-        <a href="{% url "client:delete" client.id %}"
-           class="py-2 px-4 bg-red-500">Удалить клиента</a>
+        <div class="flex space-x-2 mb-4">
+            <a href="{% url "client:edit" client.id %}"
+               class="py-2 px-4 bg-green-600 text-white hover:bg-green-700 rounded-lg">Изменить</a>
+            <a href="{% url "client:delete" client.id %}"
+               class="py-2 px-4 bg-red-600 text-white hover:bg-red-700 rounded-lg">Удалить клиента</a>
+        </div>
         <hr class="my-4">
-        <h2 class="mb-6 text-3xl">Комментарии</h2>
+        <h2 class="mb-6 text-3xl font-semibold">Комментарии</h2>
         <div class="space-y-4">
             {% for comment in client.comments.all %}
                 <p>
                     <strong class="mb-2">{{ comment.created_by }}</strong>
                 </p>
-                {{ comment.created_at }}
+                <p>{{ comment.created_at }}</p>
                 <div class="bg-gray-100 py-6 px-6 rounded-xl">{{ comment.content }}</div>
             {% endfor %}
         </div>
@@ -36,30 +38,33 @@
               class="my-4">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="py-2 px-4 bg-blue-400">Отправить</button>
+            <button class="py-2 px-4 bg-blue-600 text-white hover:bg-blue-700 rounded-lg">Отправить</button>
         </form>
         <hr class="my-4">
-        <h2 class="mb-6 text-3xl">Файлы</h2>
+        <h2 class="mb-6 text-3xl font-semibold">Файлы</h2>
         <div class="space-y-4">
             {% for file in client.files.all %}
                 <p>
                     <strong class="mb-2">{{ file.created_by }}</strong>
                 </p>
-                {{ file.created_at }}
+                <p>{{ file.created_at }}</p>
                 <div class="bg-gray-100 py-6 px-6 rounded-xl">
-                    <a href="{{ file.file.url }}">Загрузить файл</a>
+                    <a href="{{ file.file.url }}" class="text-blue-600 hover:text-blue-700">Загрузить файл</a>
                 </div>
             {% endfor %}
         </div>
         <form method="post"
               action="{% url "client:add_file" client.id %}"
-              enctype="multipart/form-data">
+              enctype="multipart/form-data"
+              class="my-4">
             {% csrf_token %}
             {{ fileform.as_p }}
-            <button class="py-2 px-4 bg-blue-400">Отправить</button>
+            <div class="mt-4">
+                <button class="py-2 px-4 bg-blue-600 text-white hover:bg-blue-700 rounded-lg">Отправить</button>
+            </div>
         </form>
         <hr class="my-4">
         <a href="{% url "client:all" %}"
-           class="inline-block py-4 px-6 bg-yellow-300">Назад к списку клиентов</a>
+           class="inline-block py-2 px-6 bg-blue-600 text-white hover:bg-blue-700 rounded-lg">Назад к списку клиентов</a>
     </div>
 {% endblock content %}

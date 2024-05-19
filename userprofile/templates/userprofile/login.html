@@ -3,12 +3,12 @@
     Войти
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1 class="mb-6 text-xl">Войти</h1>
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-2xl font-semibold mb-4">Войти</h1>
         <form method="post" action=".">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class=" mt-6 py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
+            <button class="mt-4 py-2 px-6 bg-green-600 text-white hover:bg-green-700 rounded-xl">Подтвердить</button>
         </form>
     </div>
 {% endblock content %}

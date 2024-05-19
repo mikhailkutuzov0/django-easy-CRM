@@ -3,20 +3,21 @@
     Все клиенты
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1 class="mb-4 text-xl">Все Клиенты</h1>
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="mb-4 text-2xl font-semibold">Все Клиенты</h1>
         <a href="{% url "client:add" %}"
-           class="inline-block py-4 px-6 bg-yellow-300">Добавить клиента</a>
+           class="inline-block py-2 px-6 bg-blue-600 text-white hover:bg-blue-700 rounded-lg">Добавить клиента</a>
         <a href="{% url "client:export" %}"
-           class="inline-block py-4 px-6 bg-yellow-300">Экспортировать всех клиентов</a>
+           class="inline-block py-2 px-6 bg-blue-600 text-white hover:bg-blue-700 rounded-lg">Экспортировать всех клиентов</a>
         {% if clients %}
-            <div class="mt-6  flex justify-between">
-                <p class="py-4 px-2 bg-green-300 font-semibold w-full">Имя</p>
+            <div class="mt-6 flex justify-between">
+                <p class="py-4 px-2 bg-blue-300 font-semibold w-full">Имя</p>
             </div>
             {% for client in clients %}
                 <div class="flex justify-between">
                     <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">
-                        <a href="{% url "client:detail" client.id %}">{{ client.name }}</a>
+                        <a href="{% url "client:detail" client.id %}"
+                           class="text-blue-600 hover:text-blue-700">{{ client.name }}</a>
                     </p>
                 </div>
             {% endfor %}

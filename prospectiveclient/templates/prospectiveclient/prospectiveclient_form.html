@@ -3,16 +3,18 @@
     Редактировать клиента
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1>{{ title }}</h1>
-        {% if team.client_team_access.max_prospective_clients > team.prospectiveclients.count or  title == "Изменить потенциального клиента" %}
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-2xl font-semibold mb-4">{{ title }}</h1>
+        {% if team.client_team_access.max_prospective_clients > team.prospectiveclients.count or title == "Изменить потенциального клиента" %}
             <form method="post" action=".">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button class="py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
+                <div class="space-y-4">
+                    {{ form.as_p }}
+                    <button class="mt-4 py-2 px-6 bg-green-600 text-white hover:bg-green-700 rounded-lg">Подтвердить</button>
+                </div>
             </form>
         {% else %}
-            <div class="mt-6 px-6 py-4 bg-red-400 rounded-xl text-white">Лимит был исчерпан!</div>
+            <div class="mt-6 px-6 py-4 bg-red-600 rounded-xl text-white">Лимит был исчерпан!</div>
         {% endif %}
     </div>
 {% endblock content %}

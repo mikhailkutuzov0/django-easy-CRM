@@ -3,10 +3,10 @@
     {{ prospectiveclient.name }}
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1 class="mb-4 text-xl">{{ prospectiveclient.name }}</h1>
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="mb-4 text-2xl font-semibold">{{ prospectiveclient.name }}</h1>
         {% if prospectiveclient.description %}
-            <p class="font.semibold">Описание</p>
+            <p class="font-semibold">Описание</p>
             <p class="mb-3">{{ prospectiveclient.description }}</p>
         {% endif %}
         <p class="font-semibold">Приоритет</p>
@@ -26,51 +26,53 @@
             {% csrf_token %}
         </form>
         <a href="{% url "prospectiveclient:convert" prospectiveclient.id %}"
-           class="py-2 px-4 bg-blue-400">Переместить в клиенты</a>
+           class="py-2 px-4 bg-blue-600 text-white hover:bg-blue-700 rounded-xl">Переместить в клиенты</a>
         <a href="{% url "prospectiveclient:edit" prospectiveclient.id %}"
-           class="py-2 px-4 bg-green-300">Изменить</a>
+           class="py-2 px-4 bg-green-600 text-white hover:bg-green-700 rounded-xl">Изменить</a>
         <a href="#"
            onclick="document.getElementById('prospectiveclient_delete_form').submit();"
-           class="py-2 px-4 bg-red-500">Удалить клиента</a>
+           class="py-2 px-4 bg-red-600 text-white hover:bg-red-700 rounded-xl">Удалить клиента</a>
         <hr class="my-4">
-        <h2 class="mb-6 text-3xl">Комментарии</h2>
+        <h2 class="mb-6 text-3xl font-semibold">Комментарии</h2>
         <div class="space-y-4">
             {% for comment in prospectiveclient.comments.all %}
                 <p>
                     <strong class="mb-2">{{ comment.created_by }}</strong>
                 </p>
-                {{ comment.created_at }}
+                <p>{{ comment.created_at }}</p>
                 <div class="bg-gray-100 py-6 px-6 rounded-xl">{{ comment.content }}</div>
             {% endfor %}
         </div>
         <form method="post"
-              action="{% url "prospectiveclient:add_comment" prospectiveclient.id %}">
+              action="{% url "prospectiveclient:add_comment" prospectiveclient.id %}"
+              class="mt-4">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="py-2 px-4 bg-blue-400">Отправить</button>
+            <button class="py-2 px-4 bg-blue-600 text-white hover:bg-blue-700 rounded-xl mt-4">Отправить</button>
         </form>
         <hr class="my-4">
-        <h2 class="mb-6 text-3xl">Файлы</h2>
+        <h2 class="mb-6 text-3xl font-semibold">Файлы</h2>
         <div class="space-y-4">
             {% for file in prospectiveclient.files.all %}
                 <p>
                     <strong class="mb-2">{{ file.created_by }}</strong>
                 </p>
-                {{ file.created_at }}
+                <p>{{ file.created_at }}</p>
                 <div class="bg-gray-100 py-6 px-6 rounded-xl">
-                    <a href="{{ file.file.url }}">Загрузить файл</a>
+                    <a href="{{ file.file.url }}" class="text-blue-600 hover:text-blue-700">Загрузить файл</a>
                 </div>
             {% endfor %}
         </div>
         <form method="post"
               action="{% url "prospectiveclient:add_file" prospectiveclient.id %}"
-              enctype="multipart/form-data">
+              enctype="multipart/form-data"
+              class="mt-4">
             {% csrf_token %}
             {{ fileform.as_p }}
-            <button class="py-2 px-4 bg-blue-400">Отправить</button>
+            <button class="py-2 px-4 bg-blue-600 text-white hover:bg-blue-700 rounded-xl mt-4">Отправить</button>
         </form>
         <hr class="my-4">
         <a href="{% url "prospectiveclient:all" %}"
-           class="inline-block py-4 px-6 bg-yellow-300">Назад к списку потенциальных клиентов</a>
+           class="inline-block py-2 px-6 bg-blue-600 text-white hover:bg-blue-700 rounded-xl">Назад к списку потенциальных клиентов</a>
     </div>
 {% endblock content %}

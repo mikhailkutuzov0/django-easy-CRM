@@ -3,23 +3,24 @@
     Все потенциальные клиенты
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1 class="mb-4 text-xl">Все потенциальные клиенты</h1>
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="mb-4 text-2xl font-semibold">Все потенциальные клиенты</h1>
         <a href="{% url "prospectiveclient:add" %}"
-           class="inline-block py-4 px-6 bg-yellow-300">Добавить нового потенциального клиента</a>
+           class="inline-block py-2 px-6 bg-blue-600 text-white hover:bg-blue-700 rounded-xl">Добавить нового потенциального клиента</a>
         {% if object_list %}
-            <div class="mt-6  flex justify-between">
-                <p class="py-4 px-2 bg-green-300 font-semibold w-full">Имя</p>
-                <p class="py-4 px-2 bg-green-300 font-semibold w-full">Приоритет</p>
-                <p class="py-4 px-2 bg-green-300 font-semibold w-full">Статус</p>
+            <div class="mt-6 flex justify-between">
+                <p class="py-4 px-2 bg-blue-300 font-semibold w-full">Имя</p>
+                <p class="py-4 px-2 bg-blue-300 font-semibold w-full">Приоритет</p>
+                <p class="py-4 px-2 bg-blue-300 font-semibold w-full">Статус</p>
             </div>
             {% for client in object_list %}
-                <div class="flex justify-between">
-                    <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">
-                        <a href="{% url "prospectiveclient:detail" client.id %}">{{ client.name }}</a>
+                <div class="flex justify-between {% cycle 'bg-gray-100' 'bg-gray-200' %} rounded-lg p-2">
+                    <p class="py-2 px-2 w-full">
+                        <a href="{% url "prospectiveclient:detail" client.id %}"
+                           class="text-blue-600 hover:text-blue-700">{{ client.name }}</a>
                     </p>
-                    <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_priority_display }}</p>
-                    <p class="py-2 px-2 w-full {% cycle 'bg-gray-100' '' %}">{{ client.get_status_display }}</p>
+                    <p class="py-2 px-2 w-full">{{ client.get_priority_display }}</p>
+                    <p class="py-2 px-2 w-full">{{ client.get_status_display }}</p>
                 </div>
             {% endfor %}
         {% else %}

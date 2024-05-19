@@ -3,18 +3,18 @@
     Команды
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1 class="mb-6 text-2xl">Команды</h1>
-        <div class="grid grid-cols-4 gap-4">
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="mb-6 text-2xl font-semibold">Команды</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {% for team in teams %}
-                <div class="{% if team == active_team %}bg-emerald-100{% else %}bg-gray-100{% endif %} rounded-xl p-6">
-                    <h2 class="mb-4 text-xl">{{ team.name }}</h2>
+                <div class="{% if team == active_team %}bg-emerald-100{% else %}bg-gray-100{% endif %} rounded-xl p-6 shadow-md">
+                    <h2 class="mb-4 text-xl font-semibold">{{ team.name }}</h2>
                     {% if team == active_team %}
                         <a href="{% url "team:detail" team.id %}"
-                           class="inline-block py-4 px-6 bg-green-500">Назад</a>
+                           class="inline-block py-2 px-4 bg-green-600 text-white hover:bg-green-700 rounded-xl">Назад</a>
                     {% else %}
                         <a href="{% url "team:activate" team.id %}"
-                           class="inline-block py-4 px-6 bg-green-500">Выбрать команду</a>
+                           class="inline-block py-2 px-4 bg-green-600 text-white hover:bg-green-700 rounded-xl">Выбрать команду</a>
                     {% endif %}
                 </div>
             {% endfor %}

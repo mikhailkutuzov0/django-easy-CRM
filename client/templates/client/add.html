@@ -3,17 +3,16 @@
     Добавить нового клиента
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1>Добавить нового клиента</h1>
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-2xl font-semibold mb-4">Добавить нового клиента</h1>
         {% if team.client_team_access.max_clients > team.prospectiveclients.all|length %}
-            Количество активных клиентов : {{ team.prospectiveclients.all | length }}
             <form method="post" action=".">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button class="py-4 px-8 bg-green-400 rounded-xl">Подтвердить</button>
-            {% else %}
-                <div class="mt-6 px-6 py-4 bg-red-400 rounded-xl text-white">Лимит был исчерпан!</div>
-            {% endif %}
-        </form>
+                <button class="mt-4 py-2 px-4 bg-green-600 text-white hover:bg-green-700 rounded-lg">Подтвердить</button>
+            </form>
+        {% else %}
+            <div class="mt-6 px-6 py-4 bg-red-600 rounded-xl text-white">Лимит был исчерпан!</div>
+        {% endif %}
     </div>
 {% endblock content %}

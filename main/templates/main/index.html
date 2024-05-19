@@ -3,5 +3,22 @@
     EasyCRM
 {% endblock title %}
 {% block content %}
-    indexpage
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-2xl font-semibold mb-4">Добро пожаловать в EasyCRM</h1>
+        <p class="mb-4">
+            EasyCRM - ваш надежный партнер в управлении взаимоотношениями с клиентами. Мы предоставляем простые и эффективные инструменты для управления всеми аспектами взаимодействия с клиентами.
+        </p>
+        <p class="mb-4">С EasyCRM вы сможете:</p>
+        <ul class="list-disc list-inside mb-4">
+            <li>Отслеживать взаимодействия с клиентами</li>
+            <li>Управлять потенциальными клиентами</li>
+            <li>Анализировать данные и генерировать отчеты</li>
+            <li>Автоматизировать повторяющиеся задачи</li>
+        </ul>
+        <p class="mb-4">Присоединяйтесь к нам и начните оптимизировать свои бизнес-процессы уже сегодня!</p>
+        {% if not request.user.is_authenticated %}
+            <a href="{% url 'userprofile:registration' %}"
+               class="inline-block py-2 px-6 bg-blue-600 text-white hover:bg-blue-700 rounded-xl">Зарегистрироваться</a>
+        {% endif %}
+    </div>
 {% endblock content %}

@@ -3,16 +3,17 @@
     {{ team.name }}
 {% endblock title %}
 {% block content %}
-    <div class="py-6 px-6">
-        <h1 class="text-xl">{{ team.name }}</h1>
-        <a href="{% url "team:all" %}">Сменить команду</a>
+    <div class="py-6 px-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-2xl font-semibold mb-4">{{ team.name }}</h1>
+        <a href="{% url "team:all" %}" class="text-blue-600 hover:text-blue-700">Сменить команду</a>
         {% if team.created_by == request.user %}
-            <div>
-                <a href="{% url "team:edit" team.id %}">Изменить</a>
+            <div class="mt-4">
+                <a href="{% url "team:edit" team.id %}"
+                   class="text-blue-600 hover:text-blue-700">Изменить</a>
             </div>
         {% endif %}
         <p class="mt-6">
-            <strong>Кто создал команду:</strong>  {{ team.created_by }}
+            <strong>Кто создал команду:</strong> {{ team.created_by }}
         </p>
         <hr class="my-4">
         <h2 class="font-semibold">Участники</h2>
